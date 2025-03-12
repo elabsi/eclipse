@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECLIPSE EVERYTHING</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary: #34495e;
+            --secondary: #5dade2;
+            --light: #f0f3f4;
+            --text-dark: #2c3e50;
+            --text-light: #fff;
+            --border-radius: 8px;
+            --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            --bar-color: #90EE90;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #121212;
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        /* Top Bar Styling */
+        .top-bar {
+            background-color: var(--bar-color);
+            color: black;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--box-shadow);
+        }
+
+        .top-bar-text {
+            position: absolute;
+            white-space: nowrap;
+            display: flex;
+            animation: moveText 40s linear infinite;
+            /* Reduced speed */
+        }
+
+        .top-bar-text span {
+            padding: 0 10px;
+            border-right: 1px solid black;
+            color: white;
+            /* Set text color to white */
+            font-weight: bold;
+            /* Make text bold */
+            text-shadow: 0 0 5px white;
+            /* Add a glow effect */
+            border-right: 1px solid white; /* Glow effect for the line */
+        }
+
+        .top-bar-text span:last-child {
+            border-right: none;
+        }
+
+        @keyframes moveText {
+            0% {
+                transform: translateX(0%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Editor Container and other styles remain the same */
+        .editor-container {
+            max-width: 1200px;
+            max-height: 750px;
+            margin: 2rem auto;
+            background: #222;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            display: flex;
+            height: calc(100vh - 4rem);
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            padding: 2rem;
+            justify-content: space-between;
+        }
+
+        .sticker-library {
+            width: 300px; /* Increased width to take up more space */
+            padding: 1rem;
+            background: #333;
+            border-radius: var(--border-radius);
+            margin-right: 2rem;
+            display: flex;
+            /* Changed to row */
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 0.5rem;
+            /* Reduced gap to fit 3 stickers */
+            overflow-y: auto;
+            /* Added wrap */
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            /* Align items to the start */
+            align-content: flex-start;
+            /* Align rows to the start */
+        }
+
+        .sticker-library::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sticker-library::-webkit-scrollbar-track {
+            background: #444;
+            border-radius: 5px;
+        }
+
+        .sticker-library::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 5px;
+        }
+
+        .sticker-library h3 {
+            margin-bottom: 0.5rem;
+            color: var(--light);
+            width: 100%;
+            text-align: center;
+        }
+
+        .sticker-item {
+            width: 55px; /* Adjusted width to fit 3 in a row */
+            height: 55px; /* Adjusted height to match width */
+            object-fit: contain;
+            cursor: pointer;
+            padding: 5px;
+            background: #444;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .sticker-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Center stickers */
+        #sticker-library {
+            display: flex;
+            /* Changed to row */
+            flex-direction: row;
+            align-items: flex-start;
+            /* Added wrap */
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            /* Added to align items to the start */
+        }
+
+        .canvas-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: auto;
+            /* Adjusted width */
+        }
+
+        .canvas-container {
+            border: 2px dashed #bdc3c7;
+            border-radius: var(--border-radius);
+            min-height: 500px;
+            background: var(--text-light);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            /* Adjusted width */
+            margin-bottom: 1rem;
+            box-shadow: var(--box-shadow);
+            border: none;
+            /* Remove the side border from the canvas */
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--bar-color); /* Matches your theme */
+    text-shadow: 0 0 5px white; /* Glow effect */
+}
+
+.footer a {
+    text-decoration: none;
+    color: white; /* Ensure link is visible */
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            /* Make buttons appear in a row */
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn,
+        .upload-label {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: var(--box-shadow);
+            background: var(--bar-color);
+            /* Same color as the bar */
+            color: var(--text-dark);
+            position: relative;
+            /* Positioning context for file input */
+            overflow: hidden;
+            width: auto;
+            /* Adjust button width to fit content */
+        }
+
+        .btn:hover,
+        .upload-label:hover {
+            background: #4aa3df;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Style the file input to cover the label */
+        #file-upload {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            /* Make it transparent */
+            cursor: pointer;
+        }
+
+        /* end CSS for file input */
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .editor-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .main-content {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .sticker-library {
+                margin-right: 0;
+                margin-bottom: 1rem;
+                width: 100%;
+                overflow-x: auto;
+                height: auto;
+            }
+
+            .sticker-library::-webkit-scrollbar {
+                height: 5px;
+                width: auto;
+            }
+
+            .canvas-section {
+                width: 100%;
+            }
+
+            .canvas-container {
+                max-width: 100%;
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .button-group {
+                flex-direction: row;
+                /* Make buttons appear in a row */
+                justify-content: center;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .btn,
+            .upload-label {
+                width: auto;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top-bar">
+        <div class="top-bar-text">
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+            <span>ECLIPSE EVERYTHING</span>
+        </div>
+    </div>
+    
+    <div class="editor-container">
+        <div class="main-content">
+            <div class="sticker-library">
+                <h3>Stickers</h3>
+                <div id="sticker-library">
+                    <!-- Stickers will be loaded dynamically -->
+                </div>
+            </div>
+
+            <div class="canvas-section">
+
+                <div class="canvas-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+                <div class="button-group">
+                    <label class="upload-label">
+                        <i class="fas fa-upload"></i> Choose Image
+                        <input type="file" id="file-upload" accept="image/*">
+                    </label>
+
+                    <button class="btn" onclick="downloadImage()">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                    <button class="btn" onclick="resetCanvas()">
+                        <i class="fas fa-trash"></i> Reset
+                    </button>
+                    <button class="btn" onclick="tweetImage()">
+                        <i class="fab fa-twitter"></i> Tweet
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <div class="footer">
+        Made with 💚 by <a href="https://twitter.com/0xnormal_" target="_blank">@0xnormal_</a>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+    <script>
+        // Initialize canvas with a fixed size of 500x500
+        const canvas = new fabric.Canvas('canvas', {
+            width: 500,
+            height: 500,
+            backgroundColor: '#ffffff',
+            preserveObjectStacking: true
+        });
+
+        // Sticker configuration
+        const stickerPaths = [
+            'stickers/1.png',
+            'stickers/8.png',
+            'stickers/7.png',
+            'stickers/6.png',
+            'stickers/5.png',
+            'stickers/3.png',
+            'stickers/2.png',
+            'stickers/4.png',
+            'stickers/10.png',
+            'stickers/11.png',
+            'stickers/12.png',
+            'stickers/13.png',
+            'stickers/14.png',
+            'stickers/15.png',
+            'stickers/16.png',
+            'stickers/17.png',
+            'stickers/18.png',
+            'stickers/19.png',
+            'stickers/20.png',
+            'stickers/21.png'
+        ];
+
+        // Load sticker library with error handling
+        document.addEventListener('DOMContentLoaded', () => {
+            const stickerLibrary = document.getElementById('sticker-library');
+
+            stickerPaths.forEach(path => {
+                const img = new Image();
+                img.className = 'sticker-item';
+                img.src = path;
+
+                // Error handling
+                img.onerror = () => {
+                    console.error('❌ Failed to load sticker:', path);
+                    img.style.display = 'none';
+                };
+
+                // Click handler with debug logging
+                img.onclick = () => {
+                    console.log('➕ Adding sticker:', path);
+                    addSticker(path);
+                };
+
+                stickerLibrary.appendChild(img);
+            });
+        });
+
+        // Override the _drawControl function to reposition the rotation control
+        fabric.Object.prototype._drawControl = function (ctx, control, key, fabricObject) {
+            if (key === 'mtr') { // 'mtr' is the key for the rotate control
+                var size = this.cornerSize;
+                ctx.save();
+
+                ctx.translate(this.width / 2, 0); //translate in the center
+                ctx.rotate(fabric.util.degreesToRadians(this.angle));
+
+                ctx.beginPath();
+                ctx.clearRect(-size / 2, -size / 2, size, size);
+                ctx.closePath();
+                ctx.strokeRect(-size / 2, -size / 2, size, size);
+
+                ctx.restore();
+            }
+            else {
+                fabric.Object.prototype._drawControl.call(this, ctx, control, key, fabricObject);
+            }
+        }
+        // Fixed sticker addition function
+        function addSticker(stickerPath) {
+            fabric.Image.fromURL(stickerPath, img => {
+                // Scale the image to fit within the canvas dimensions while maintaining aspect ratio
+                const maxWidth = 500;
+                const maxHeight = 500;
+                let scale = Math.min(maxWidth / img.width, maxHeight / img.height);
+
+                // Ensure the scale is not greater than 1 to prevent upscaling
+                scale = Math.min(scale, 1);
+
+                img.set({
+                    left: 100,
+                    top: 100,
+                    scaleX: scale,
+                    scaleY: scale,
+                    hasControls: true,
+                    hasBorders: true,
+                    selectable: true
+                });
+
+                // Add to canvas and make visible
+                canvas.add(img);
+                canvas.bringToFront(img);
+                canvas.setActiveObject(img);
+                canvas.requestRenderAll();
+                console.log('✅ Sticker added successfully');
+            }, {
+                crossOrigin: 'anonymous' // Important for avoiding CORS issues
+            }, (error) => {
+                console.error('⚠️ Sticker load error:', error);
+                alert('Failed to add sticker. Check console for details.');
+            });
+        }
+
+        // Image upload handler
+        document.getElementById('file-upload').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                fabric.Image.fromURL(event.target.result, img => {
+                    canvas.clear();  // Clear the canvas before adding a new image
+
+                    // Scale image to fit within the 500x500 canvas
+                    const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+                    img.set({
+                        scaleX: scale,
+                        scaleY: scale,
+                        left: (canvas.width - img.width * scale) / 2,  // Center horizontally
+                        top: (canvas.height - img.height * scale) / 2  // Center vertically
+                    });
+
+                    // Add image to canvas and make it non-selectable (prevent movement)
+                    canvas.add(img);
+                    img.set({ selectable: false });
+                    canvas.requestRenderAll();
+                });
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Download function with image format preservation
+        function downloadImage() {
+            try {
+                canvas.renderAll();
+
+                if (canvas.isEmpty()) {
+                    alert('Please add an image first!');
+                    return;
+                }
+
+                // Get the uploaded image format (e.g., PNG, JPG)
+                const activeObject = canvas.getActiveObject();
+                const fileType = activeObject ? activeObject.type : 'png';  // Default to PNG if not available
+
+                // Create a temporary canvas with the size of the canvas (500x500)
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = canvas.width;
+                tempCanvas.height = canvas.height;
+
+                // Draw the canvas content onto the new canvas (adjust for background)
+                // tempCtx.fillStyle = '#ffffff';  // Optional: Set background to white
+                // tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+                // Draw the image content
+                tempCtx.drawImage(canvas.lowerCanvasEl, 0, 0, canvas.width, canvas.height);
+
+                // Determine file extension (if uploaded image is PNG, JPG)
+                const fileExtension = fileType === 'png' ? 'png' : 'jpg';
+
+                // Create a download link for the image
+                const link = document.createElement('a');
+                link.download = `design-${Date.now()}.${fileExtension}`;
+                link.href = tempCanvas.toDataURL(`image/${fileExtension}`);
+                link.click();
+
+            } catch (error) {
+                console.error('Download error:', error);
+                alert('Download failed. Please try again.');
+            }
+        }
+
+        function tweetImage() {
+        const imageDataURL = canvas.toDataURL('image/png');
+
+        // Convert image to Blob for upload
+        fetch(imageDataURL)
+            .then(res => res.blob())
+            .then(blob => {
+                const formData = new FormData();
+                formData.append('media', blob, 'image.png');
+
+                // Create Twitter intent URL with a pre-filled caption
+                const caption = encodeURIComponent('ECLIPSE EVERYTHING💚,\n\nCheck out my Eclipse mode\n\nTry it now: eclipsemode.xyz');
+
+                // Create a Blob URL for the image
+                const blobUrl = URL.createObjectURL(blob);
+
+                // Open Twitter share intent with the image
+                const twitterUrl = `https://twitter.com/intent/tweet?text=${caption}`;
+
+                window.open(twitterUrl, '_blank');
+            })
+            .catch(err => console.error('Error preparing image for Twitter:', err));
+    }
+
+        // Reset function
+        function resetCanvas() {
+            canvas.clear();
+            canvas.backgroundColor = '#ffffff';
+            canvas.requestRenderAll();
+            document.getElementById('file-upload').value = '';
+        }
+
+        // Delete key handler
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'Delete' || e.key === 'Backspace') && canvas.getActiveObject()) {
+                canvas.remove(canvas.getActiveObject());
+                canvas.requestRenderAll();
+            }
+        });
+    </script>    
+    
+</body>
+
+</html>
